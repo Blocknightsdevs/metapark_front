@@ -8,8 +8,8 @@ import Web3 from "web3";
 import * as ether_utils from "./ether-utils.json";
 import * as errors from "./errors.json";
 
-const mPARKToken="0x4b6aB5F819A515382B0dEB6935D793817bB4af28";
-const presale="0xCace1b78160AE76398F486c8a18044da0d66d86D";
+const mPARKToken="0x22753E4264FDDc6181dc7cce468904A80a363E44";
+const presale="0xA7c59f010700930003b33aB25a7a0679C860f29c"; 
 
 function App() {
   const [web3, setWeb3] = useState(undefined);
@@ -20,6 +20,7 @@ function App() {
   const [error, setError] = useState(false);
   const [endTime, setEndTime] = useState("");
   const [presaleEnded, setPresaleEnded] = useState(true);
+  const [contribution, setContribution] = useState(true);
 
   function checkNewtwork(networkId) {
     //check network
@@ -51,6 +52,8 @@ function App() {
         let contribution = await presaleContractInterface.methods
           .checkContribution(accounts[0])
           .call();
+
+        setContribution(contribution);
         console.log(contribution, "checkContribution");
 
         let balanceOfPresale = await tokenContractInterface.methods
@@ -146,7 +149,7 @@ function App() {
       
       <div>{presaleEnded ? <p>Presale ended</p> : <p>End time {endTime}</p>}</div>
       {!presaleEnded && <button onClick={() => buyTokens()}>Buy Tokens</button> }
-      <button onClick={() => claimTokens()}>Claim Tokens</button>
+      {contribution > 0 && <button onClick={() => claimTokens()}>Claim Tokens</button>}
     </>
   );
 }
